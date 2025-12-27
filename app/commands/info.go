@@ -9,14 +9,11 @@ import (
 type InfoCommand Command
 
 func (cmd *InfoCommand) Execute(con *client.Client) RESPValue {
-	if len(cmd.args) == 0 {
-		return resp.EncodeSimpleError("unsupported option. Currently only info replication is supported")
-	}
 	if len(cmd.args) > 1 {
 		return resp.EncodeSimpleError(errWrongNumberOfArgs)
 	}
 
-	if cmd.args[0] != "replication" {
+	if len(cmd.args) != 0 && cmd.args[0] != "replication" {
 		return resp.EncodeSimpleError(errSyntax)
 	}
 
