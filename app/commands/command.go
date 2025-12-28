@@ -10,6 +10,7 @@ const (
 	errSyntax               = "syntax error"
 	invalidStreamID         = "ERR Invalid stream ID specified as stream command argument"
 	idGreaterThanTopElement = "ERR The ID specified in XADD is equal or smaller than the target stream top item"
+	errSubscribedMode       = "ERR only (P|S)SUBSCRIBE / (P|S)UNSUBSCRIBE / PING / QUIT / RESET are allowed in this context"
 )
 
 type RESPValue []byte
@@ -25,6 +26,16 @@ type Command struct {
 }
 
 type NotImplementedCommand Command
+
+// IsAllowedInSubscribedMode checks if a command is allowed when client is in subscribed mode
+func IsAllowedInSubscribedMode(label string) bool {
+	switch label {
+	case "subscribe", "unsubscribe", "psubscribe", "punsubscribe", "ping", "quit", "reset":
+		return true
+	default:
+		return false
+	}
+}
 
 func New(label string, params []string) Executor {
 	switch label {
@@ -56,6 +67,12 @@ func New(label string, params []string) Executor {
 		return &ExecCommand{label: label, args: params}
 	case "discard":
 		return &DiscardCommand{label: label, args: params}
+	case "subscribe":
+		return &SubscribeCommand{label: label, args: params}
+	case "unsubscribe":
+		return &UnsubscribeCommand{label: label, args: params}
+	case "publish":
+		return &PublishCommand{label: label, args: params}
 	}
 	return &NotImplementedCommand{}
 }

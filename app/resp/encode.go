@@ -55,3 +55,11 @@ func EncodeInteger(value int64) []byte {
 func Success() []byte {
 	return EncodeSimpleString("OK")
 }
+
+func EncodePubSubResponse(msgType, channel string, count int) []byte {
+	return EncodeArray([][]byte{
+		EncodeBulkString(msgType),
+		EncodeBulkString(channel),
+		EncodeInteger(int64(count)),
+	})
+}

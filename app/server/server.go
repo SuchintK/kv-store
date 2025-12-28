@@ -61,6 +61,15 @@ func (s *Server) handleClient(cli *client.Client) {
 			continue
 		}
 
+		// Check if client is in subscribed mode and command is not allowed
+		if cli.IsSubscribed() && !command.IsAllowedInSubscribedMode(decoded.Label) {
+			response := resp.EncodeSimpleError("ERR only (P|S)SUBSCRIBE / (P|S)UNSUBSCRIBE / PING / QUIT / RESET are allowed in this context")
+			cli.Write(response)
+			cli.Flush()
+			cli.BytesRead += p.BytesRead()
+			continue
+		}
+
 		// Check if we're in a transaction and need to queue the command
 		if cli.IsInTransaction() && decoded.Label != "exec" && decoded.Label != "discard" {
 			// Queue the command instead of executing it
