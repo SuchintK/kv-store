@@ -10,9 +10,10 @@ var db = make(map[string]*Value)
 var mut sync.Mutex = sync.Mutex{}
 
 type Value struct {
-	StreamData *Stream
-	Data       string
-	ExpiresAt  *time.Time
+	StreamData    *Stream
+	SortedSetData *SortedSet
+	Data          string
+	ExpiresAt     *time.Time
 }
 
 // StreamEntry represents a single entry in a stream

@@ -73,6 +73,18 @@ func New(label string, params []string) Executor {
 		return &UnsubscribeCommand{label: label, args: params}
 	case "publish":
 		return &PublishCommand{label: label, args: params}
+	case "zadd":
+		return &ZAddCommand{label: label, args: params, IsMutation: true}
+	case "zrank":
+		return &ZRankCommand{label: label, args: params}
+	case "zrange":
+		return &ZRangeCommand{label: label, args: params}
+	case "zcard":
+		return &ZCardCommand{label: label, args: params}
+	case "zscore":
+		return &ZScoreCommand{label: label, args: params}
+	case "zrem":
+		return &ZRemCommand{label: label, args: params, IsMutation: true}
 	}
 	return &NotImplementedCommand{}
 }
