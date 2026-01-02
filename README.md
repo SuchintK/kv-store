@@ -387,12 +387,12 @@ PSYNC ? -1
 
 Run all tests:
 ```bash
-go test ./app/tests/...
+go test ./tests/...
 ```
 
 Run specific test:
 ```bash
-go test ./app/tests/zadd_test.go -v
+go test ./tests/zadd_test.go -v
 ```
 
 ---
